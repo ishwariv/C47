@@ -4,16 +4,21 @@ const Bodies = Matter.Bodies;
 const Constraint = Matter.Constraint;
 
 var engine, world;
-var box1, pig1,pig3;
+var box1, box2,box3,box4,box5;
+var log1,log3,log4,log5; 
+var pig1,pig3;
 var backgroundImg,platform;
 var bird, slingshot;
+var box7, 
 
 var gameState = "onSling";
 var bg = "sprites/bg1.png";
 var score = 0;
+var bgImg;
 
 function preload() {
     getBackgroundImg();
+    bgImg=loadImage(bg);
 }
 
 function setup(){
@@ -47,13 +52,22 @@ function setup(){
 }
 
 function draw(){
-    if(backgroundImg)
+    if(backgroundImg){
         background(backgroundImg);
-    
         noStroke();
         textSize(35)
         fill("white")
-        text("Score  " + score, width-300, 50)
+        text("Score:  " + score, width-300, 50)
+    }
+    else{
+        background(bgImg);
+        noStroke();
+        textSize(35)
+        fill("white")
+        text("Score:  " + score, width-300, 50)
+    }
+    
+        
     
     Engine.update(engine);
     //strokeWeight(4);
@@ -94,6 +108,8 @@ function mouseReleased(){
 
 function keyPressed(){
     if(keyCode === 32){
+       //bird.trajectory=[];
+       Matter.Body.setPosition(bird.body,{x:200,y:50});
        slingshot.attach(bird.body);
     }
 }
@@ -106,9 +122,11 @@ async function getBackgroundImg(){
     var hour = datetime.slice(11,13);
     
     if(hour>=0600 && hour<=1900){
+        //day
         bg = "sprites/bg1.png";
     }
     else{
+        //night
         bg = "sprites/bg2.jpg";
     }
 
