@@ -1,3 +1,4 @@
+//Global Variables
 var snake, snakeImg;
 var bg;
 var apple, appleImg;
@@ -5,27 +6,38 @@ var knifeSound;
 var appleGrp;
 var score=0;
 var gameState=0;
+var wall1, wall2, wall3, wall4;
 
+//Images
 function preload(){
-    snakeImg=loadImage("snake.png");
     appleImg=loadImage("apple.png");
     bg=loadImage("bg.jpg");
-    knifeSound=loadSound("knifeSound.mp3");
 }
 
 function setup(){
  createCanvas(600,600);
- snake = createSprite(50,430,20,20);
- snake.addImage(snakeImg);
- snake.scale=0.75;
+ snake = createSprite(108,275,40,40);
  appleGrp=new Group();
- snake.setCollider("rectangle",-35,-140,snake.width-150,snake.height-350);
+ snake.setCollider("rectangle",0,0,40,40);
+ snake.debug=true;
+//-35,-140,-150,-350
 
+ //walls
+ wall1=createSprite(300,45,520,10);
+ wall2=createSprite(300,555,520,10);
+ wall3=createSprite(45,300,10,520);
+ wall4=createSprite(555,300,10,520);
+
+/* wall1.visible=false;
+ wall2.visible=false;
+ wall3.visible=false;
+ wall4.visible=false;*/
 }
 
 function draw(){
     background(bg);
 
+    //Directions
     if(keyDown(RIGHT_ARROW)){
         snake.x=snake.x+10;
     }
@@ -40,26 +52,40 @@ function draw(){
     }
     if(keyDown(RIGHT_ARROW)||keyDown(LEFT_ARROW)||keyDown(UP_ARROW)||keyDown(DOWN_ARROW)){
         gameState=0;
+        console.log(gameState);
     }
     if(gameState===0){
         spawnApples();
     }
+
+    if(snake.x>555||snake.x<45){
+        textFont('Georgia');
+        fill(0);
+        textSize(20);
+        text("Game Over",250,200);
+        gameState=1;
+        console.log("Ha! Game Over"+gameState)
+    }
+
     textFont('Georgia');
     fill(0);
     textSize(20);       
     text("Score: "+score,480,35);
-    eatApples();
-    drawSprites();
+    text("Hits: ",250,35);
+
+eatApples();
+drawSprites();
 }
 
 function spawnApples(){
-    if(frameCount%200===0 && gameState===0){
+    if(frameCount%150===0 && gameState===0){
         apple = createSprite(350,327,20,20);
-        apple.x=Math.round(random(100,540));
-        apple.y=Math.round(random(40,530));
+        apple.x=Math.round(random(60,540));
+        apple.y=Math.round(random(65,540));
         apple.addImage(appleImg);
         apple.scale=0.075;
         appleGrp.add(apple);
+        appleGrp.setLifetimeEach(150);
     }
 }
 
